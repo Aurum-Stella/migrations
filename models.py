@@ -1,4 +1,4 @@
-from sqlalchemy import MetaData
+from sqlalchemy import MetaData, Index
 from sqlalchemy.orm import DeclarativeBase
 from utils.custom_type import *
 from utils.utils import get_all_subclasses
@@ -10,7 +10,7 @@ class Base(DeclarativeBase):
 
 class PlanAndFact(Base):
     __tablename__ = 'plan_and_fact'
-    __table_args__ = {'extend_existing': True}
+
     id: Mapped[uuidpk]
     created_on_record: Mapped[created_on_record]
     update_on_record: Mapped[update_on_record]
@@ -24,14 +24,18 @@ class PlanAndFact(Base):
     fact_sum: Mapped[int] = mapped_column(Integer(), nullable=True)
     fact_average_duration: Mapped[int] = mapped_column(SmallInteger, nullable=True)
 
+    __table_args__ = (
+        Index('ix_id', 'id'),
+        Index('ix_created_on', 'created_on'),
+        Index('ix_created_on_&_report_type_&_product_type', 'created_on', 'report_type', 'product_type'),
+
+        {'extend_existing': True},)
+
 
 tablesUsed = get_all_subclasses(Base)
 print(tablesUsed)
-
 
 # alembic revision --autogenerate -m "Migration name"
 # alembic upgrade head
 # alembic downgrade -1
 # alembic downgrade base очистить миграции
-
-
