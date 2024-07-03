@@ -18,10 +18,10 @@ class Settings:
 
     def database_connect(self):
         return (
-            f"host={self.DB_HOST} "
-            f"dbname={self.DB_DB_NAME} "
-            f"user={self.DB_USER} "
-            f"password={quote(self.DB_PASSWORD)} "
+            f"host={self.DB_HOST}"
+            f"dbname={self.DB_DB_NAME}"
+            f"user={self.DB_USER}"
+            f"password={quote(self.DB_PASSWORD)}"
             f"port={self.DB_PORT}"
         )
 
@@ -31,7 +31,7 @@ class Settings:
 
     @property
     def database_url(self) -> str:
-        return f"postgresql+psycopg://{self.DB_USER}:{quote(self.DB_PASSWORD)}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_DB_NAME}"
+        return f"postgresql+psycopg://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_DB_NAME}"
 
 
 settings = Settings()

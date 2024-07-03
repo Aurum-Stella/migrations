@@ -8,7 +8,7 @@ from models import Base, tablesUsed
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-config.set_main_option('sqlalchemy.url', settings.test_url)
+config.set_main_option('sqlalchemy.url', settings.database_url)
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 if config.config_file_name is not None:
@@ -57,6 +57,7 @@ def run_migrations_offline() -> None:
         url=url,
         target_metadata=target_metadata,
         literal_binds=True,
+        dialect_name='postgresql',
         dialect_opts={"paramstyle": "named"},
         include_object=include_object
     )
@@ -82,7 +83,8 @@ def run_migrations_online() -> None:
         context.configure(
             connection=connection,
             target_metadata=target_metadata,
-            include_object=include_object
+            include_object=include_object,
+            dialect_name='postgresql'
         )
 
         with context.begin_transaction():
