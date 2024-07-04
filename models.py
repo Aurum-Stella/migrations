@@ -11,8 +11,8 @@ class Base(DeclarativeBase):
 class PlanAndFact(Base):
     __tablename__ = 'plan_and_fact'
 
-    id: Mapped[uuidpk]
-    created_on_record: Mapped[created_on_record]
+    id: Mapped[uuid_pk_auto]
+    created_on_record: Mapped[created_on_record_auto]
     update_on_record: Mapped[update_on_record]
     created_on: Mapped[created_on_date]
     report_type: Mapped[str_20]

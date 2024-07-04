@@ -8,11 +8,20 @@ from typing import Annotated
 import uuid
 from sqlalchemy import types
 
-intpk = Annotated[int, mapped_column(primary_key=True)]
-uuidpk = Annotated[uuid.UUID, mapped_column(postgresql.UUID(as_uuid=True),
-                                            primary_key=True,
-                                            default=uuid.uuid4)]
+int_pk = Annotated[int, mapped_column(primary_key=True)]
+uuid_pk = Annotated[uuid.UUID, mapped_column(postgresql.UUID(as_uuid=True),
+                                             primary_key=True,
+                                             default=uuid.uuid4)]
+uuid_pk_auto = Annotated[uuid.UUID, mapped_column(postgresql.UUID(as_uuid=True),
+                                                  primary_key=True,
+                                                  default=text("gen_random_uuid()"),
+                                                  server_default=text("gen_random_uuid()")
+                                                  )]
+
 created_on_record = Annotated[datetime.datetime, mapped_column(DateTime(timezone=True))]
+created_on_record_auto = Annotated[datetime.datetime, mapped_column(DateTime(timezone=True),
+                                                                    server_default=text(
+                                                                        "TIMEZONE('Europe/Kiev', now())"))]
 created_on_datime = Annotated[datetime.datetime, mapped_column(DateTime(timezone=True))]
 created_on_date = Annotated[datetime.date, mapped_column(postgresql.DATE())]
 update_on_record = Annotated[datetime.datetime, mapped_column(
