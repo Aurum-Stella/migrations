@@ -16,7 +16,7 @@ class PlanAndFact(Base):
     update_on_record: Mapped[update_on_record]
     created_on: Mapped[created_on_date]
     report_type: Mapped[str_20]
-    product_type: Mapped[str_20]
+    product_type: Mapped[str] = mapped_column(String(20), nullable=True)
     plan_count: Mapped[int] = mapped_column()
     plan_sum: Mapped[int] = mapped_column()
     plan_average_duration: Mapped[int] = mapped_column(SmallInteger)
