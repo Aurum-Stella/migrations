@@ -1,7 +1,8 @@
 from sqlalchemy import MetaData, Index
 from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.types import Numeric
 from utils.custom_type import *
-from utils.utils import get_all_subclasses
+from utils.utils import get_all_subclasses, deleted_all_data_in_table
 
 
 class Base(DeclarativeBase):
@@ -18,11 +19,11 @@ class PlanAndFact(Base):
     report_type: Mapped[str_20]
     product_type: Mapped[str] = mapped_column(String(20), nullable=True)
     plan_count: Mapped[int] = mapped_column()
-    plan_sum: Mapped[int] = mapped_column()
-    plan_average_duration: Mapped[int] = mapped_column(SmallInteger)
+    plan_sum: Mapped[float] = mapped_column(Numeric(12, 2))
+    plan_average_duration: Mapped[float] = mapped_column(Numeric(12, 2), nullable=True)
     fact_count: Mapped[int] = mapped_column(Integer(), nullable=True)
-    fact_sum: Mapped[int] = mapped_column(Integer(), nullable=True)
-    fact_average_duration: Mapped[int] = mapped_column(SmallInteger, nullable=True)
+    fact_sum: Mapped[float] = mapped_column(Numeric(12, 2), nullable=True)
+    fact_average_duration: Mapped[float] = mapped_column(Numeric(12, 2), nullable=True)
 
     __table_args__ = (
         Index('ix_id', 'id'),
@@ -33,7 +34,10 @@ class PlanAndFact(Base):
 
 
 tablesUsed = get_all_subclasses(Base)
+
 print(tablesUsed)
+
+# deleted_all_data_in_table(PlanAndFact)
 
 # alembic revision --autogenerate -m "Migration name"
 # alembic upgrade head
