@@ -26,7 +26,7 @@ class PlanAndFact(Base):
     fact_average_duration: Mapped[float] = mapped_column(Numeric(12, 2), nullable=True)
 
     __table_args__ = (
-        Index('ix_id', 'id'),
+        Index('plan_and_fact_pkey', 'id'),
         Index('ix_created_on', 'created_on'),
         Index('ix_created_on_&_report_type_&_product_type', 'created_on', 'report_type', 'product_type'),
 
@@ -65,17 +65,17 @@ class AllMailings(Base):
     mailing_name: Mapped[str] = mapped_column()
 
     __table_args__ = (
-
-        Index('ix_user_id', 'user_id'),
-        Index('ix_lead_id', 'lead_id'),
-        Index('ix_phone', 'phone'),
-        Index('ix_date_sent', 'date_sent'),
-        Index('ix_sms_id', 'sms_id'),
-        Index('ix_sms_campaign_event_id', 'campaign_event_id'),
-        Index('ix_sms_stats_id', 'sms_stats_id', unique=True),
-        Index('ix_sms_version_id', 'sms_version_id'),
-        Index('ix_mailing_name', 'mailing_name'),
-        Index('ix_mailing_type', 'mailing_type'),
+        Index('mailings2_ix_id', 'id'),
+        Index('mailings2_ix_user_id', 'user_id'),
+        Index('mailings2_ix_lead_id', 'lead_id'),
+        Index('mailings2_ix_phone', 'phone'),
+        Index('mailings2_ix_date_sent', 'date_sent'),
+        Index('mailings2_ix_sms_id', 'sms_id'),
+        Index('mailings2_ix_sms_campaign_event_id', 'campaign_event_id'),
+        Index('mailings2_ix_sms_stats_id', 'sms_stats_id', unique=True),
+        Index('mailings2_ix_sms_version_id', 'sms_version_id'),
+        Index('mailings2_ix_mailing_name', 'mailing_name'),
+        Index('mailings2_ix_mailing_type', 'mailing_type'),
 
         {'extend_existing': True},)
 
@@ -95,9 +95,41 @@ class MaillingsEvents(Base):
     end_offer_period: Mapped[created_on_datetime] = mapped_column(nullable=True)
     object_offer_id: Mapped[uuid.UUID] = mapped_column(nullable=True)
     accepted_offer_date: Mapped[created_on_datetime] = mapped_column(nullable=True)
+    mailing_group_id: Mapped[uuid.UUID] = mapped_column(nullable=True)
 
-    Index('ix_mailing_id', 'mailing_id'),
-    Index('ix_object_offer_id', 'object_offer_id')
+    __table_args__ = (
+        Index('mailings_events_ix_mailing_id', 'mailing_id'),
+        Index('mailings_events_ix_object_offer_id', 'object_offer_id'),
+        Index('mailings_events_ix_object_mailing_group_id', 'mailing_group_id'),
+        {'extend_existing': True},
+    )
+
+
+class WriteOffs(Base):
+    __tablename__ = 'write_offs'
+
+    id: Mapped[uuid_pk_auto]
+    created_on_record: Mapped[created_on_record_auto]
+    update_on_record: Mapped[update_on_record]
+    user_id: Mapped[uuid.UUID] = mapped_column()
+    client_name: Mapped[str] = mapped_column()
+    identification_number: Mapped[int] = mapped_column()
+    loan_id: Mapped[uuid.UUID] = mapped_column()
+    contract_number: Mapped[int] = mapped_column()
+    loan_signed_date: Mapped[created_on_datetime] = mapped_column()
+    write_off_date: Mapped[created_on_date] = mapped_column()
+    contract_amount: Mapped[float] = mapped_column()
+    write_off_amount: Mapped[float] = mapped_column()
+    write_off_reason: Mapped[str] = mapped_column()
+    write_off_comments: Mapped[str] = mapped_column()
+
+    __table_args__ = (
+        Index('write_offs_ix_user_id', 'user_id'),
+        Index('write_offs_ix_identification_number', 'identification_number'),
+        Index('write_offs_ix_loan_id', 'loan_id'),
+        Index('write_offs_ix_contract_number', 'contract_number'),
+        Index('write_offs_ix_write_off_reason', 'write_off_reason'),
+        {'extend_existing': True},)
 
 
 tablesUsed = get_all_subclasses(Base)
